@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <h1>Movie API test</h1>
+  <script>
+    fetch('http://localhost:8000/movie', {
+      headers: {
+        Authorization: 'Bearer 49af937e-f716-11ea-adc1-0242ac120002'
+      }
+    })
+    .then(response => {console.log(response.json())})
+    .catch(error => console.log(error))
+  </script>
+
+</body>
+</html>
