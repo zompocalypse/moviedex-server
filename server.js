@@ -4,11 +4,14 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 
+const { PORT } = require('./config');
 const MOVIES_STORE = require('./movies.json');
 const app = express();
 
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common';
+
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan(morganSetting));
 app.use(helmet());
 
 app.use(function validateBearer(req, res, next) {
@@ -48,8 +51,14 @@ const getSearchOptions = (req, res) => {
 
 app.get('/movie', getSearchOptions);
 
-const PORT = 8000;
-
-app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`);
+app.use((error, req, res, next) => {
+  let response;
+  if (process.env.NODE_ENV === 'production') {
+    response = { error: { message: 'server error' }};
+  } else {
+    response = { error };
+  }
+  res.status(500).json(response);
 });
+
+app.listen(PORT);
